@@ -81,7 +81,7 @@ function initPass() {
     fxaaPass = new WAGNER.FXAAPass();
 
     // GUI - https://github.com/dataarts/dat.gui
-    gui = new DAT.GUI();
+    gui = new dat.GUI();
 
     gui.add(rgbSplitPass.params.delta, 'x').min(0).max(100);
     gui.add(rgbSplitPass.params.delta, 'y').min(0).max(100);

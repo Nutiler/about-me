@@ -1,9 +1,7 @@
 'use strict'
 
 var container, renderer, scene, camera, mesh, torus, material, fov = 70;
-var model, quad, oculusEffect;
-var light, composer;
-var controls;
+var model, quad, oculusEffect, light, composer, controls;
 
 var tloader = new THREE.TextureLoader();
 
@@ -32,9 +30,7 @@ document.getElementById( 'fullscreenBtn' ).addEventListener( 'click', function( 
 }, false );
 
 window.addEventListener( 'load', function() {
-
 	init();
-	
 } );
 
 
@@ -42,7 +38,6 @@ window.addEventListener( 'load', function() {
 function init() {
 
 	container = document.getElementById( 'container' );
-	
 	scene = new THREE.Scene();
 
 	camera = new THREE.PerspectiveCamera( fov, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -110,7 +105,6 @@ var modelMaterial = new THREE.MeshPhongMaterial( {
 } );
 
 function createTeapot() {
-
 	var sphere = new THREE.Mesh( new THREE.IcosahedronGeometry( 2000, 4 ), new THREE.MeshNormalMaterial( { side: THREE.BackSide } ) );
 	scene.add( sphere );
 
@@ -135,7 +129,6 @@ function createTeapot() {
 }
 
 function createLeePerry() {
-
 	var loader = new THREE.JSONLoader();
 	loader.load( './assets/models/LeePerrySmith.js', function( data ) { 
 		data.computeFaceNormals();
@@ -195,7 +188,6 @@ function onWindowResize() {
 
 	renderer.setSize( s * w, s * h );
 	camera.projectionMatrix.makePerspective( fov, w / h, camera.near, camera.far );
-	
 	resizePass();
 
 }
@@ -203,23 +195,16 @@ function onWindowResize() {
 function onMouseWheel( event ) {
 
 	// WebKit
-
 	if ( event.wheelDeltaY ) {
-
 		fov -= event.wheelDeltaY * 0.05;
-
+		
 	// Opera / Explorer 9
-
 	} else if ( event.wheelDelta ) {
-
 		fov -= event.wheelDelta * 0.05;
-
+		
 	// Firefox
-
 	} else if ( event.detail ) {
-
 		fov += event.detail * 1.0;
-
 	}
 
 	camera.projectionMatrix.makePerspective( fov, window.innerWidth / window.innerHeight, camera.near, camera.far );
@@ -227,9 +212,7 @@ function onMouseWheel( event ) {
 }
 
 var mouseX = 0, mouseY = 0;
-
 function onDocumentMouseMove( e ) {
-
 	mouseX = 10 * ( .5 * window.innerWidth - e.pageX );
 	mouseY = 10 * ( .5 * window.innerHeight - e.pageY );
 
@@ -241,17 +224,9 @@ var copy = true;
 function render() {
 	
 	requestAnimationFrame( render );
-
 	var t = .001 * Date.now();
-
-	/*rS( 'frame' ).start();
-    rS( 'rAF' ).tick();
-    rS( 'FPS' ).frame();*/
-
 	light.position.set( 0, 3000 * Math.cos( t ), 2000 * Math.sin( t ) );
-
 	renderPass();
-
 	startTime = t;
 
 }
