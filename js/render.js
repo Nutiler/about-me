@@ -1,16 +1,3 @@
-// Stats.js - https://github.com/mrdoob/stats.js/
-// var stats = new Stats();
-// stats.showPanel(1);
-// document.body.appendChild(stats.dom);
-
-// var canvas = document.createElement('canvas');
-// canvas.width = 512;
-// canvas.height = 512;
-// document.body.appendChild(canvas);
-
-// var context = canvas.getContext('2d');
-// context.fillStyle = 'rgba(127,0,255,0.05)';
-
 // rStats.js - http://spite.github.io/rstats/
 var rS = new rStats({
     CSSPath: './assets/stats/',
@@ -42,10 +29,7 @@ glowMaterial.map.repeat = new THREE.Vector2(1, 1);
 glowMaterial.map.wrapS = glowMaterial.map.wrapT = THREE.RepeatWrapping;
 
 function initPass() {
-    //createTeapot();
-    //createLeePerry();
     createCubes();
-
     composer = new WAGNER.Composer(renderer, { useRGBA: false });
 
     // Color Split
@@ -122,7 +106,6 @@ function initPass() {
 
     // scene.children[ 3 ].material = new THREE.MeshNormalMaterial();
 
-
 }
 
 function resizePass() {
@@ -167,13 +150,13 @@ function renderPass() {
 
     }
 
-    composer.pass(fxaaPass);
-    composer.pass(dofPass);
-    composer.pass(bloomPass);
+    // composer.pass(fxaaPass);
+    // composer.pass(dofPass);
+    // composer.pass(bloomPass);
 
-    composer.pass(vignette2Pass);
-    composer.pass(rgbSplitPass);
-    composer.pass(noisePass);
+    // composer.pass(vignette2Pass);
+    // composer.pass(rgbSplitPass);
+    // composer.pass(noisePass);
 
     composer.toScreen();
 
