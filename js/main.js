@@ -76,7 +76,7 @@ function render() {
 	
 	requestAnimationFrame( render );
 	var t = .001 * Date.now();
-	// light.position.set( 0, 3000 * Math.cos( t ), 2000 * Math.sin( t ) );
+	light.position.set( 0, 3000 * Math.cos( t ), 2000 * Math.sin( t ) );
 	renderPass();
 	startTime = t;
 
