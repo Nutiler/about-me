@@ -4,7 +4,7 @@ var modelMaterial = new THREE.MeshPhongMaterial( {
 	map: tloader.load( './assets/textures/1324-decal.jpg' ), 
 	normalMap: tloader.load( './assets/textures/1324-normal.jpg' ),
 	shininess: 10,
-	shading: THREE.SmoothShading
+	flatShading: THREE.SmoothShading
 } );
 
 function createCubes() {
@@ -26,5 +26,15 @@ function createCubes() {
 	model.receiveShadow = true;
 
 	scene.add( model );
+	
+	// Grid Helper.
+	var size = 2500;
+	var divisions = 20;
+	var colorCenterLine = 0xa3a3a3;
+	// var colorGrid = 0xffffff;
+	
+	var gridHelper = new THREE.GridHelper( size, divisions, colorCenterLine );
+	scene.add( gridHelper );
 
 }
+

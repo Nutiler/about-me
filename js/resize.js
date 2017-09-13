@@ -1,18 +1,18 @@
 // Enter Fullscreen
-var c = document.body;
-document.getElementById( 'fullscreenBtn' ).addEventListener( 'click', function( e ) {
-	c.onwebkitfullscreenchange = function(e) {
-		c.onwebkitfullscreenchange = function() {
-		};
-	};
-	c.onmozfullscreenchange = function(e) {
-		c.onmozfullscreenchange = function() {
-		};
-	};
-	if( c.webkitRequestFullScreen ) c.webkitRequestFullScreen();
-	if( c.mozRequestFullScreen ) c.mozRequestFullScreen();
-	e.preventDefault();
-}, false );
+// var c = document.body;
+// document.getElementById( 'fullscreenBtn' ).addEventListener( 'click', function( e ) {
+// 	c.onwebkitfullscreenchange = function(e) {
+// 		c.onwebkitfullscreenchange = function() {
+// 		};
+// 	};
+// 	c.onmozfullscreenchange = function(e) {
+// 		c.onmozfullscreenchange = function() {
+// 		};
+// 	};
+// 	if( c.webkitRequestFullScreen ) c.webkitRequestFullScreen();
+// 	if( c.mozRequestFullScreen ) c.mozRequestFullScreen();
+// 	e.preventDefault();
+// }, false );
 
 window.addEventListener( 'load', function() {
 	init();
@@ -33,7 +33,7 @@ function onMouseWheel( event ) {
 		fov += event.detail * 1.0;
 	}
 
-	camera.projectionMatrix.makePerspective( fov, window.innerWidth / window.innerHeight, camera.near, camera.far );
+	camera.updateProjectionMatrix();
 	
 }
 

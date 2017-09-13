@@ -100,7 +100,7 @@ function initPass() {
             },
             vertexShader: this.get('depth-vs'),
             fragmentShader: this.get('depth-fs'),
-            shading: THREE.SmoothShading
+            flatShading: THREE.SmoothShading
         });
     });
 
@@ -117,9 +117,9 @@ function resizePass() {
 
 function renderPass() {
     // stats.begin();
-    rS('frame').start();
-    rS('rAF').tick();
     rS('FPS').frame();
+    rS('rAF').tick();
+
 
     // depthMaterial.side = THREE.DoubleSide;
     // scene.overrideMaterial = depthMaterial;
@@ -145,7 +145,7 @@ function renderPass() {
 
     }
     else {
-
+        
         composer.render(scene, camera);
 
     }
@@ -162,4 +162,5 @@ function renderPass() {
 
     rS().update();
     // stats.end();
+
 }

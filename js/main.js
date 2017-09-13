@@ -54,20 +54,20 @@ function init() {
 	renderer.shadowMap.type = THREE.PCFShadowMap;
 
 	initPass();
-
 	onWindowResize();
-
 	render();
 	
 }
 
 function onWindowResize() {
+	
 	var s = 1,
-		w = window.innerWidth,
-		h = window.innerHeight;
-		
+	w = window.innerWidth,
+	h = window.innerHeight;
 	renderer.setSize( s * w, s * h );
-	camera.projectionMatrix.makePerspective( fov, w / h, camera.near, camera.far );
+	camera.aspect = window.innerWidth / window.innerHeight;
+	
+	camera.updateProjectionMatrix();
 	resizePass();
 
 }
@@ -75,9 +75,9 @@ function onWindowResize() {
 function render() {
 	
 	requestAnimationFrame( render );
-	var t = .001 * Date.now();
-	light.position.set( 0, 3000 * Math.cos( t ), 2000 * Math.sin( t ) );
+	// var t = .001 * Date.now();
+	// light.position.set( 0, 3000 * Math.cos( t ), 2000 * Math.sin( t ) );
 	renderPass();
-	startTime = t;
+	// startTime = t;
 
 }

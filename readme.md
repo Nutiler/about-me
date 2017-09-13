@@ -39,3 +39,7 @@ Links:
 [Occulus Rift](https://va3c.github.io/three.js/examples/misc_controls_oculusrift.html)
 [3D Sound](https://threejs.org/examples/misc_sound.html)
 [On Click](https://stackoverflow.com/questions/38314521/change-color-of-mesh-using-mouseover-in-three-js)
+
+Bugs:
+
+Wagner copy method: three.min.js:23361 THREE.WebGLRenderer.setTexture2D: don't use render targets as textures. Use their .texture property instead.

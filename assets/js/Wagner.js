@@ -301,7 +301,7 @@ WAGNER.processShader = function( vertexShaderCode, fragmentShaderCode ) {
 		uniforms: uniforms,
 		vertexShader: vertexShaderCode,
 		fragmentShader: fragmentShaderCode,
-		shading: THREE.FlatShading,
+		flatShading: THREE.FlatShading,
 		depthWrite: false,
 		depthTest: false,
 		transparent: true
