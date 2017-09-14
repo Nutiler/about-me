@@ -8,6 +8,8 @@ var rS = new rStats({
     }
 });
 
+
+
 // WAGNER Shaders - https://github.com/spite/Wagner
 WAGNER.vertexShadersPath = './assets/shaders/vertex-shaders';
 WAGNER.fragmentShadersPath = './assets/shaders/fragment-shaders';
@@ -29,6 +31,8 @@ glowMaterial.map.repeat = new THREE.Vector2(1, 1);
 glowMaterial.map.wrapS = glowMaterial.map.wrapT = THREE.RepeatWrapping;
 
 function initPass() {
+				var prevTime = performance.now();
+			var velocity = new THREE.Vector3();
     
     	controls = new THREE.PointerLockControls( camera );
 				scene.add( controls.getObject() );
@@ -87,6 +91,7 @@ function initPass() {
 						case 39: // right
 						case 68: // d
 							moveRight = false;
+							console.log("AYYY")
 							break;
 
 					}
@@ -293,6 +298,8 @@ function renderPass() {
 }
 
 function animate() {
+				var prevTime = performance.now();
+			var velocity = new THREE.Vector3();
 
 	requestAnimationFrame(animate);
 
