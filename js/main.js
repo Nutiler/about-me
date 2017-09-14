@@ -1,32 +1,184 @@
+// Post Processing.
+// josh@stormheart.net
+
 'use strict'
 
 var display, renderer, scene, camera, mesh, torus, material, fov = 75;
-var model, quad, light, composer, controls;
+var model, quad, light, composer, controls, raycaster;
 var startTime = Date.now();
 
-	var controlsEnabled = true;
+	var controls;
+	var objects = [];
+	var raycaster;
 
 
-var controls;
+var controlsEnabled = false;
 
-var objects = [];
+var moveForward = false;
+var moveBackward = false;
+var moveLeft = false;
+var moveRight = false;
+var canJump = false;
 
-var raycaster;
+var prevTime = performance.now();
+var velocity = new THREE.Vector3();
 
-var blocker = document.getElementById('blocker');
-var instructions = document.getElementById('instructions');
+function initialized() {
 
-
-function init() {
 
 	display = document.getElementById('display');
+
 	scene = new THREE.Scene();
+	// scene.background = new THREE.Color( 0xffffff );
+	// scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
+
 
 	camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, 1, 10000);
 	// camera.position.z = 1000;
 	// scene.add( camera );
 
+
 	controls = new THREE.PointerLockControls(camera);
+	scene.add(controls.getObject());
+
+
+
+
+
+
+
+	var onKeyDown = function(event) {
+
+		switch (event.keyCode) {
+
+			case 38: // up
+			case 87: // w
+				moveForward = true;
+				break;
+
+			case 37: // left
+			case 65: // a
+				moveLeft = true;
+				break;
+
+			case 40: // down
+			case 83: // s
+				moveBackward = true;
+				break;
+
+			case 39: // right
+			case 68: // d
+				moveRight = true;
+				break;
+
+			case 32: // space
+				if (canJump === true) velocity.y += 350;
+				canJump = false;
+				break;
+
+		}
+
+	};
+
+	var onKeyUp = function(event) {
+
+		switch (event.keyCode) {
+
+			case 38: // up
+			case 87: // w
+				moveForward = false;
+				break;
+
+			case 37: // left
+			case 65: // a
+				moveLeft = false;
+				break;
+
+			case 40: // down
+			case 83: // s
+				moveBackward = false;
+				break;
+
+			case 39: // right
+			case 68: // d
+				moveRight = false;
+				break;
+
+		}
+
+	};
+
+	document.addEventListener('keydown', onKeyDown, false);
+	document.addEventListener('keyup', onKeyUp, false);
+
+	raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
+
+
+// floor
+
+		var	geometry = new THREE.PlaneGeometry(2000, 2000, 100, 100);
+			geometry.rotateX(-Math.PI / 2);
+
+			for (var i = 0, l = geometry.vertices.length; i < l; i++) {
+
+				var vertex = geometry.vertices[i];
+				vertex.x += Math.random() * 20 - 10;
+				vertex.y += Math.random() * 2;
+				vertex.z += Math.random() * 20 - 10;
+
+			}
+
+			for (var i = 0, l = geometry.faces.length; i < l; i++) {
+
+				var face = geometry.faces[i];
+				// face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+				// face.vertexColors[ 1 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+				face.vertexColors[2] = new THREE.Color().setHSL(Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
+
+			}
+
+			material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
+
+			mesh = new THREE.Mesh(geometry, material);
+			scene.add(mesh);
+
+			// objects
+
+			geometry = new THREE.BoxGeometry(20, 20, 20);
+
+			for (var i = 0, l = geometry.faces.length; i < l; i++) {
+
+				var face = geometry.faces[i];
+				face.vertexColors[0] = new THREE.Color().setHSL(Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
+				face.vertexColors[1] = new THREE.Color().setHSL(Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
+				face.vertexColors[2] = new THREE.Color().setHSL(Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
+
+			}
+
+			for (var i = 0; i < 500; i++) {
+
+				material = new THREE.MeshPhongMaterial({ specular: 0xffffff, flatShading: true, vertexColors: THREE.VertexColors });
+
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.position.x = Math.floor(Math.random() * 20 - 10) * 20;
+				mesh.position.y = Math.floor(Math.random() * 20) * 20 + 10;
+				mesh.position.z = Math.floor(Math.random() * 20 - 10) * 20;
+				scene.add(mesh);
+
+				material.color.setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
+
+				objects.push(mesh);
+
+			}
+
+
+
+
+
+
+
+
+
 
 	renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
 	renderer.setSize(window.innerWidth, window.innerHeight);
@@ -34,12 +186,15 @@ function init() {
 	renderer.setClearColor(0x6b6b6b, 1);
 
 	display.appendChild(renderer.domElement);
-
 	window.addEventListener('resize', onWindowResize, false);
 
 	var SHADOW_MAP_WIDTH = 2048,
 		SHADOW_MAP_HEIGHT = 1024;
 
+
+
+
+	// lighting
 	var ambient = new THREE.AmbientLight(0x444444);
 	scene.add(ambient);
 
@@ -53,7 +208,7 @@ function init() {
 	light.shadow.camera.far = 2500;
 	light.shadow.camera.fov = 90;
 
-	//light.shadowCameraVisible = true;
+	light.shadowCameraVisible = true;
 
 	light.shadow.bias = 0.0001;
 	light.shadow.darkness = 0.5;
@@ -67,108 +222,67 @@ function init() {
 	renderer.shadowMap.type = THREE.PCFShadowMap;
 
 
-	var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
-
-	if (havePointerLock) {
-
-		var element = document.body;
-
-		var pointerlockchange = function(event) {
-
-			if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
-
-				controlsEnabled = true;
-				controls.enabled = true;
-
-				blocker.style.display = 'none';
-
-			}
-			else {
-
-				controls.enabled = false;
-
-				blocker.style.display = '-webkit-box';
-				blocker.style.display = '-moz-box';
-				blocker.style.display = 'box';
-
-				instructions.style.display = '';
-
-			}
-
-		};
-
-		var pointerlockerror = function(event) {
-
-			instructions.style.display = '';
-
-		};
-
-		// Hook pointer lock state change events
-		document.addEventListener('pointerlockchange', pointerlockchange, false);
-		document.addEventListener('mozpointerlockchange', pointerlockchange, false);
-		document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
-
-		document.addEventListener('pointerlockerror', pointerlockerror, false);
-		document.addEventListener('mozpointerlockerror', pointerlockerror, false);
-		document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
-
-		instructions.addEventListener('click', function(event) {
-
-			instructions.style.display = 'none';
-
-			// Ask the browser to lock the pointer
-			element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-			element.requestPointerLock();
-
-		}, false);
-
-	}
-	else {
-
-		instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
-
-	}
-
-	initPass();
+	// start it
+	createCubes();
+	postProcessing();
 	onWindowResize();
-
 	render();
-	animate();
-
-
-
-	var moveForward = false;
-	var moveBackward = false;
-	var moveLeft = false;
-	var moveRight = false;
-	var canJump = false;
-
-	var prevTime = performance.now();
-	var velocity = new THREE.Vector3();
-
-}
-
-function onWindowResize() {
-
-	var s = 1,
-		w = window.innerWidth,
-		h = window.innerHeight;
-	renderer.setSize(s * w, s * h);
-	camera.aspect = window.innerWidth / window.innerHeight;
-	
-	camera.updateProjectionMatrix();
-	resizePass();
-
 }
 
 function render() {
-
 	requestAnimationFrame(render);
 	// var t = .001 * Date.now();
-	// light.position.set( 0, 3000 * Math.cos( t ), 2000 * Math.sin( t ) );
+	// light.position.set(0, 3000 * Math.cos(t), 2000 * Math.sin(t));
 	renderPass();
 	// startTime = t;
-
 }
 
 
+
+function animate() {
+
+	requestAnimationFrame(animate);
+
+	if (controlsEnabled) {
+		raycaster.ray.origin.copy(controls.getObject().position);
+		raycaster.ray.origin.y -= 10;
+
+		var intersections = raycaster.intersectObjects(objects);
+
+		var isOnObject = intersections.length > 0;
+
+		var time = performance.now();
+		var delta = (time - prevTime) / 1000;
+
+		velocity.x -= velocity.x * 10.0 * delta;
+		velocity.z -= velocity.z * 10.0 * delta;
+
+		velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+
+		if (moveForward) velocity.z -= 400.0 * delta;
+		if (moveBackward) velocity.z += 400.0 * delta;
+
+		if (moveLeft) velocity.x -= 400.0 * delta;
+		if (moveRight) velocity.x += 400.0 * delta;
+
+		if (isOnObject === true) {
+			velocity.y = Math.max(0, velocity.y);
+
+			canJump = true;
+		}
+
+		controls.getObject().translateX(velocity.x * delta);
+		controls.getObject().translateY(velocity.y * delta);
+		controls.getObject().translateZ(velocity.z * delta);
+
+		if (controls.getObject().position.y < 10) {
+
+			velocity.y = 0;
+			controls.getObject().position.y = 10;
+
+			canJump = true;
+		}
+		prevTime = time;
+	}
+	renderer.render(scene, camera);
+}
