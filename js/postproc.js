@@ -105,8 +105,8 @@ function postProcessing() {
 		});
 	});
 	
-	createCubes();
-	scene.children[3].material = new THREE.MeshNormalMaterial();
+	// createCubes();
+	// scene.children[3].material = new THREE.MeshNormalMaterial();
 }
 
 function resizePass() {

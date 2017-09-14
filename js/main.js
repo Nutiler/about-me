@@ -196,7 +196,7 @@ function initialized() {
 
 	// lighting
 	var ambient = new THREE.AmbientLight(0x444444);
-	scene.add(ambient);
+	// scene.add(ambient);
 
 	light = new THREE.SpotLight(0xaaaaaa, 1, 0, Math.PI / 2, 1);
 	light.position.set(0, 1500, 1000);
@@ -216,14 +216,14 @@ function initialized() {
 	light.shadow.mapSize.width = SHADOW_MAP_WIDTH;
 	light.shadow.mapSize.height = SHADOW_MAP_HEIGHT;
 
-	scene.add(light);
+	// scene.add(light);
 
 	renderer.shadowMap.enabled = true;
 	renderer.shadowMap.type = THREE.PCFShadowMap;
 
 
 	// start it
-	createCubes();
+	// createCubes();
 	postProcessing();
 	onWindowResize();
 	render();
@@ -284,5 +284,4 @@ function animate() {
 		}
 		prevTime = time;
 	}
-	renderer.render(scene, camera);
 }
