@@ -7,9 +7,9 @@ var display, renderer, scene, camera, mesh, torus, material, fov = 75;
 var model, quad, light, composer, controls, raycaster;
 var startTime = Date.now();
 
-	var controls;
-	var objects = [];
-	var raycaster;
+var controls;
+var objects = [];
+var raycaster;
 
 
 var controlsEnabled = false;
@@ -19,6 +19,8 @@ var moveBackward = false;
 var moveLeft = false;
 var moveRight = false;
 var canJump = false;
+var canCrouch = true;
+
 
 var prevTime = performance.now();
 var velocity = new THREE.Vector3();
@@ -34,17 +36,15 @@ function initialized() {
 
 
 	camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, 1, 10000);
-	// camera.position.z = 1000;
+	// camera.position.y = 3;
 	// scene.add( camera );
 
 
 	controls = new THREE.PointerLockControls(camera);
 	scene.add(controls.getObject());
 
-
-
-
-
+	var grid = new THREE.GridHelper(2500, 75);
+	scene.add(grid);
 
 
 	var onKeyDown = function(event) {
@@ -72,7 +72,7 @@ function initialized() {
 				break;
 
 			case 32: // space
-				if (canJump === true) velocity.y += 350;
+				if (canJump === true) velocity.y += 300;
 				canJump = false;
 				break;
 
@@ -113,73 +113,6 @@ function initialized() {
 
 	raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
 
-
-// floor
-
-		var	geometry = new THREE.PlaneGeometry(2000, 2000, 100, 100);
-			geometry.rotateX(-Math.PI / 2);
-
-			for (var i = 0, l = geometry.vertices.length; i < l; i++) {
-
-				var vertex = geometry.vertices[i];
-				vertex.x += Math.random() * 20 - 10;
-				vertex.y += Math.random() * 2;
-				vertex.z += Math.random() * 20 - 10;
-
-			}
-
-			for (var i = 0, l = geometry.faces.length; i < l; i++) {
-
-				var face = geometry.faces[i];
-				// face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-				// face.vertexColors[ 1 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-				face.vertexColors[2] = new THREE.Color().setHSL(Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-
-			}
-
-			material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
-
-			mesh = new THREE.Mesh(geometry, material);
-			scene.add(mesh);
-
-			// objects
-
-			geometry = new THREE.BoxGeometry(20, 20, 20);
-
-			for (var i = 0, l = geometry.faces.length; i < l; i++) {
-
-				var face = geometry.faces[i];
-				face.vertexColors[0] = new THREE.Color().setHSL(Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-				face.vertexColors[1] = new THREE.Color().setHSL(Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-				face.vertexColors[2] = new THREE.Color().setHSL(Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-
-			}
-
-			for (var i = 0; i < 500; i++) {
-
-				material = new THREE.MeshPhongMaterial({ specular: 0xffffff, flatShading: true, vertexColors: THREE.VertexColors });
-
-				var mesh = new THREE.Mesh(geometry, material);
-				mesh.position.x = Math.floor(Math.random() * 20 - 10) * 20;
-				mesh.position.y = Math.floor(Math.random() * 20) * 20 + 10;
-				mesh.position.z = Math.floor(Math.random() * 20 - 10) * 20;
-				scene.add(mesh);
-
-				material.color.setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-
-				objects.push(mesh);
-
-			}
-
-
-
-
-
-
-
-
-
-
 	renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer.setPixelRatio(window.devicePixelRatio);
@@ -196,7 +129,7 @@ function initialized() {
 
 	// lighting
 	var ambient = new THREE.AmbientLight(0x444444);
-	// scene.add(ambient);
+	scene.add(ambient);
 
 	light = new THREE.SpotLight(0xaaaaaa, 1, 0, Math.PI / 2, 1);
 	light.position.set(0, 1500, 1000);
@@ -216,7 +149,7 @@ function initialized() {
 	light.shadow.mapSize.width = SHADOW_MAP_WIDTH;
 	light.shadow.mapSize.height = SHADOW_MAP_HEIGHT;
 
-	// scene.add(light);
+	scene.add(light);
 
 	renderer.shadowMap.enabled = true;
 	renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -224,6 +157,7 @@ function initialized() {
 
 	// start it
 	// createCubes();
+	// createCubeMountain();
 	postProcessing();
 	onWindowResize();
 	render();
@@ -258,6 +192,20 @@ function animate() {
 		velocity.z -= velocity.z * 10.0 * delta;
 
 		velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+
+		// if touching an object don't go into it
+		// 		if (moveForward) {
+		// 	if (isOnObject === true) {
+		// 		velocity.z = 0;
+
+		// 	}
+		// 	else {
+		// 		velocity.z -= 400.0 * delta;
+
+		// 	}
+
+		// }
+
 
 		if (moveForward) velocity.z -= 400.0 * delta;
 		if (moveBackward) velocity.z += 400.0 * delta;

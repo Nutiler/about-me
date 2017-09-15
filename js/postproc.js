@@ -87,7 +87,7 @@ function postProcessing() {
 	gui.add(dofPass.params, 'amount').min(0).max(100);
 	gui.add(dofPass.params, 'invertBiasMap');
 
-	gui.open(); // or open
+	gui.close(); // or open
 
 	sL = new ShaderLoader()
 	sL.add('depth-vs', './assets/shaders/vertex-shaders/packed-depth-vs.glsl');
@@ -150,13 +150,13 @@ function renderPass() {
 
 	}
 
-	composer.pass(fxaaPass);
-	composer.pass(dofPass);
-	composer.pass(bloomPass);
+	// composer.pass(fxaaPass);
+	// composer.pass(dofPass);
+	// composer.pass(bloomPass);
 
-	composer.pass(vignette2Pass);
-	composer.pass(rgbSplitPass);
-	composer.pass(noisePass);
+	// composer.pass(vignette2Pass);
+	// composer.pass(rgbSplitPass);
+	// composer.pass(noisePass);
 
 // console.log("ayy")
 	composer.toScreen();
