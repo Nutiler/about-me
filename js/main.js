@@ -24,8 +24,13 @@ function initialized() {
 	scene.fog = new THREE.Fog(0x585858, 0, 750);
 
 	camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, 1, 10000);
+
+    camera.position.set(0, 0, 0);
+
 	controls = new THREE.PointerLockControls(camera);
+
 	scene.add(controls.getObject());
+
 
 	// Grid Helper.
 	var size = 2000;
@@ -73,8 +78,31 @@ function initialized() {
 	renderer.shadowMap.enabled = true;
 	renderer.shadowMap.type = THREE.PCFShadowMap;
 
-	// start it
-	createCubes();
+	// MTL & OBJ LOADER
+	var onProgress = function(xhr) {
+		if (xhr.lengthComputable) {
+			var percentComplete = xhr.loaded / xhr.total * 100;
+			console.log(Math.round(percentComplete, 2) + '% downloaded');
+		}
+	};
+	var onError = function(xhr) {};
+	THREE.Loader.Handlers.add(/\.dds$/i, new THREE.DDSLoader());
+	var mtlLoader = new THREE.MTLLoader();
+	mtlLoader.setPath('./assets/models/slenderman/');
+	mtlLoader.load('slendy.mtl', function(materials) {
+		materials.preload();
+		var objLoader = new THREE.OBJLoader();
+		objLoader.setMaterials(materials);
+		objLoader.setPath('./assets/models/slenderman/');
+		objLoader.load('slendy.obj', function(object) {
+			object.position.y = -80;
+			object.position.z = -40
+			scene.add(object);
+		}, onProgress, onError);
+	});
+
+
+
 
 	postProcessing();
 	onWindowResize();

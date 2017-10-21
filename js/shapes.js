@@ -30,26 +30,4 @@ function createCubes() {
 			objects.push(model);
 }
 
-function createCubeMountain() {
-		// floor
-	var geometry = new THREE.PlaneGeometry(2000, 2000, 100, 100);
-	geometry.rotateX(-Math.PI / 2);
-	material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
-	mesh = new THREE.Mesh(geometry, material);
-	scene.add(mesh);
-
-	// objects
-	geometry = new THREE.BoxGeometry(20, 20, 20);
-	for (var i = 0; i < 1; i++) {
-
-		material = new THREE.MeshPhongMaterial({ specular: 0xffffff, flatShading: true, vertexColors: THREE.VertexColors });
-
-		var mesh = new THREE.Mesh(geometry, material);
-		scene.add(mesh);
-		material.color.setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-		objects.push(mesh);
-
-	}
-}
-
 /*global scene,material,THREE,objects,model*/

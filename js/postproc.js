@@ -6,7 +6,7 @@ WAGNER.vertexShadersPath = './assets/shaders/vertex-shaders';
 WAGNER.fragmentShadersPath = './assets/shaders/fragment-shaders';
 WAGNER.assetsPath = './assets/';
 
-var depthTexture, sL, gui;
+var composer, depthTexture, sL, gui;
 var depthMaterial = new THREE.MeshBasicMaterial();
 var rgbSplitPass, noisePass, vignette2Pass,
 	bloomPass, glowTexture, dofPass, fxaaPass;
@@ -142,13 +142,13 @@ function renderPass() {
 		
 	}
 
-	composer.pass(fxaaPass);
-	composer.pass(dofPass);
-	composer.pass(bloomPass);
+	// composer.pass(fxaaPass);
+	// composer.pass(dofPass);
+	// composer.pass(bloomPass);
 
-	composer.pass(vignette2Pass);
-	composer.pass(rgbSplitPass);
-	composer.pass(noisePass);
+	// composer.pass(vignette2Pass);
+	// composer.pass(rgbSplitPass);
+	// composer.pass(noisePass);
 
 	composer.toScreen();
 	
@@ -156,4 +156,4 @@ function renderPass() {
 
 }
 
-/*global composer,scene,THREE,camera,WAGNER,tloader,ShaderLoader,renderer,createCubes,dat,rStats*/
+/*global scene,THREE,camera,WAGNER,tloader,ShaderLoader,renderer,createCubes,dat,rStats*/

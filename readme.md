@@ -1,6 +1,7 @@
 TODO:
 
-[] Update all dependencies. 
+
+lovely model by https://repromancer.itch.io/slender-man-character-model
 
 Structure:
 
