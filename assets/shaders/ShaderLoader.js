@@ -1,25 +1,26 @@
 var ShaderLoader = function() {
-	
+
 	this.loaded = 0;
 	this.toLoad = 0;
 	this.shaders = {};
 	this.queue = [];
-	this.onLoadedCallback = function(){};
+	this.onLoadedCallback = function() {};
 
-}
+};
 
-ShaderLoader.prototype.add = function( id, name ) {
+ShaderLoader.prototype.add = function(id, name) {
 
 	this.toLoad++;
-	this.shaders[ id ] = {
+	this.shaders[id] = {
 		id: id,
 		name: name,
 		content: '',
 		loaded: false
-	}
-	this.queue.push( this.shaders[ id ] );
+	};
 
-}
+	this.queue.push(this.shaders[id]);
+
+};
 
 ShaderLoader.prototype.processQueue = function() {
 
@@ -29,46 +30,46 @@ ShaderLoader.prototype.processQueue = function() {
 	oReq.onload = function() {
 		this.loaded++;
 		shader.content = oReq.responseText;
-		if( this.loaded != this.toLoad ) {
+		if (this.loaded != this.toLoad) {
 			this.processQueue();
-		} else {
+		}
+		else {
 			this.onLoadedCallback();
 		}
-	}.bind( this );
-	oReq.open( 'get', shader.name, true );
+	}.bind(this);
+	oReq.open('get', shader.name, true);
 	oReq.send();
 
-}
+};
 
 ShaderLoader.prototype.load = function() {
 
 	this.processQueue();
 
-}
+};
 
-ShaderLoader.prototype.onLoaded = function( callback ) {
+ShaderLoader.prototype.onLoaded = function(callback) {
 
-	if( this.loaded == this.toLoad ) callback();
+	if (this.loaded == this.toLoad) callback();
 	else this.onLoadedCallback = callback;
 
-}
+};
 
-ShaderLoader.prototype.get = function( id ) {
+ShaderLoader.prototype.get = function(id) {
 
-	function ShaderLoaderGetException( message ) {
+	function ShaderLoaderGetException(message) {
 		this.message = 'Cannot find shader "' + id + '".';
 		this.name = "ShaderLoaderGetException";
 		this.toString = function() {
-			return this.message
+			return this.message;
 		};
 	}
 
-	var s = this.shaders[ id ];
-	if( !s ) {
-		throw new ShaderLoaderGetException( id );
-		return;
-	} 
+	var s = this.shaders[id];
+	if (!s) {
+		throw new ShaderLoaderGetException(id);
+	}
 
 	return s.content;
 
-}
+};

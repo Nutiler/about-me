@@ -9,7 +9,7 @@ WAGNER.fragmentShadersPath = './assets/shaders/fragment-shaders';
 WAGNER.assetsPath = './assets';
 
 WAGNER.log = function() {
-	//console.log( Array.prototype.slice.call( arguments ).join( ' ' ) );
+	// console.log( Array.prototype.slice.call( arguments ).join( ' ' ) );
 };
 
 WAGNER.Composer = function( renderer, settings ) {

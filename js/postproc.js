@@ -1,34 +1,30 @@
 // Post Processing.
 // josh@stormheart.net
 
-// rStats.js - http://spite.github.io/rstats/
-var rS = new rStats({
-	CSSPath: './assets/stats/',
-	values: {
-		raf: { caption: 'rAF (ms)' },
-		frame: { caption: 'Frame Time', over: 16 },
-		fps: { caption: 'Framerate', below: 30 }
-	}
-});
-
 // WAGNER Shaders - https://github.com/spite/Wagner
 WAGNER.vertexShadersPath = './assets/shaders/vertex-shaders';
 WAGNER.fragmentShadersPath = './assets/shaders/fragment-shaders';
 WAGNER.assetsPath = './assets/';
 
-// 
-var gui;
-var depthTexture, sL;
+var depthTexture, sL, gui;
 var depthMaterial = new THREE.MeshBasicMaterial();
 var rgbSplitPass, noisePass, vignette2Pass,
 	bloomPass, glowTexture, dofPass, fxaaPass;
-
 var glowMaterial = new THREE.MeshBasicMaterial({
 	map: tloader.load('./assets/textures/1324-glow.jpg'),
 });
 
 glowMaterial.map.repeat = new THREE.Vector2(1, 1);
 glowMaterial.map.wrapS = glowMaterial.map.wrapT = THREE.RepeatWrapping;
+
+// rStats.js - http://spite.github.io/rstats/
+var rS = new rStats({
+	CSSPath: './assets/stats/',
+	values: {
+		raf: { caption: 'rAF (ms)' },
+		fps: { caption: 'Framerate', below: 30 }
+	}
+});
 
 function postProcessing() {
 	composer = new WAGNER.Composer(renderer, { useRGBA: false });
@@ -54,7 +50,7 @@ function postProcessing() {
 	bloomPass.params.blurAmount = 1.2;
 	bloomPass.params.applyZoomBlur = true;
 	bloomPass.params.zoomBlurStrength = .04;
-	// bloomPass.params.useTexture =true;
+	// bloomPass.params.useTexture = true;
 
 	// Depth of Feild
 	dofPass = new WAGNER.GuidedFullBoxBlurPass();
@@ -87,9 +83,9 @@ function postProcessing() {
 	gui.add(dofPass.params, 'amount').min(0).max(100);
 	gui.add(dofPass.params, 'invertBiasMap');
 
-	gui.close(); // or open
+	gui.close();
 
-	sL = new ShaderLoader()
+	sL = new ShaderLoader();
 	sL.add('depth-vs', './assets/shaders/vertex-shaders/packed-depth-vs.glsl');
 	sL.add('depth-fs', './assets/shaders/fragment-shaders/packed-depth-fs.glsl');
 	sL.load();
@@ -104,25 +100,21 @@ function postProcessing() {
 			flatShading: THREE.SmoothShading
 		});
 	});
-	
-	// createCubes();
-	// scene.children[3].material = new THREE.MeshNormalMaterial();
 }
 
 function resizePass() {
+	
 	composer.setSize(renderer.domElement.width, renderer.domElement.height);
 	bloomPass.params.zoomBlurCenter.set(.5 * composer.width, .5 * composer.height);
 	glowTexture = WAGNER.Pass.prototype.getOfflineTexture(composer.width, composer.height, false);
 	depthTexture = WAGNER.Pass.prototype.getOfflineTexture(composer.width, composer.height, false);
+	
 }
 
 function renderPass() {
-	// stats.begin();
+
 	rS('FPS').frame();
 	rS('rAF').tick();
-
-	// depthMaterial.side = THREE.DoubleSide;
-	// scene.overrideMaterial = depthMaterial;
 
 	composer.reset();
 
@@ -147,21 +139,21 @@ function renderPass() {
 	else {
 		
 		composer.render(scene, camera);
-
+		
 	}
 
-	// composer.pass(fxaaPass);
-	// composer.pass(dofPass);
-	// composer.pass(bloomPass);
+	composer.pass(fxaaPass);
+	composer.pass(dofPass);
+	composer.pass(bloomPass);
 
-	// composer.pass(vignette2Pass);
-	// composer.pass(rgbSplitPass);
-	// composer.pass(noisePass);
+	composer.pass(vignette2Pass);
+	composer.pass(rgbSplitPass);
+	composer.pass(noisePass);
 
-// console.log("ayy")
 	composer.toScreen();
 	
 	rS().update();
-	// stats.end();
 
 }
+
+/*global composer,scene,THREE,camera,WAGNER,tloader,ShaderLoader,renderer,createCubes,dat,rStats*/
