@@ -142,13 +142,13 @@ function renderPass() {
 		
 	}
 
-	// composer.pass(fxaaPass);
-	// composer.pass(dofPass);
-	// composer.pass(bloomPass);
+	composer.pass(fxaaPass);
+	composer.pass(dofPass);
+	composer.pass(bloomPass);
 
-	// composer.pass(vignette2Pass);
-	// composer.pass(rgbSplitPass);
-	// composer.pass(noisePass);
+	composer.pass(vignette2Pass);
+	composer.pass(rgbSplitPass);
+	composer.pass(noisePass);
 
 	composer.toScreen();
 	

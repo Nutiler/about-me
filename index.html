@@ -2,53 +2,57 @@
 <html lang="en">
 
 <head>
+	
 	<title>horror-vpp</title>
 
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<link rel="stylesheet" href="./css/index.css">
 
-	<!--three & wagner-->
+	<!--threejs.org-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/87/three.min.js"></script>
+	<script src="./assets/lib/PointerLockControls.js"></script>
+
+
+
+	<!--threejs.org/docs/#api/loaders/Loader-->
+	<script src="./assets/lib/loaders/DDSLoader.js"></script>
+	<script src="./assets/lib/loaders/MTLLoader.js"></script>
+	<script src="./assets/lib/loaders/OBJLoader.js"></script>
+	
+	<!--wagnerjs effects composer-->
 	<script src="./assets/lib/Wagner.js"></script>
 	<script src="./assets/lib/Wagner.base.js"></script>
-	
-	  <!--threejs.org/docs/#api/loaders/Loader-->
-  <script src="./assets/lib/loaders/DDSLoader.js"></script>
-  <script src="./assets/lib/loaders/MTLLoader.js"></script>
-  <script src="./assets/lib/loaders/OBJLoader.js"></script>
+	<script src="./assets/shaders/ShaderLoader.js"></script>
 
-	
 	<div id="pause">
 		<div id="instructions">
-			<span style="font-size:40px">Click to Play</span>
+			<span style="font-size:40px">Click to Move</span>
 			<br/>Horror Video Post-Processing
 		</div>
 
 	</div>
+	
 </head>
 
 <body>
 
 	<div id="display"></div>
 
-	<!--three plugins-->
-	<script src="./assets/lib/PointerLockControls.js"></script>
-	<!--<script src="./assets/lib/OBJLoader.js"></script>-->
-	<script src="./assets/shaders/ShaderLoader.js"></script>
+	<!--github.com/dataarts/dat.gui-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.5/dat.gui.min.js"></script>
 
-	<!--stats-->
+	<!--github.com/mrdoob/stats.js-->
+	<!--<script src="./assets/stats/stats.min.js"></script>-->
 	<script src="./assets/stats/rStats.js"></script>
 	<script src="./assets/stats/rStats.extras.js"></script>
-	<!--<script src="./assets/stats/stats.min.js"></script>-->
-
-
+	
+	<!--main-->
 	<script src="./js/controls.js"></script>
 	<script src="./js/resize.js"></script>
 	<script src="./js/shapes.js"></script>
 	<script src="./js/postproc.js"></script>
-	<script src="./js/main.js"></script>
+	<script src="./js/index.js"></script>
 
 </body>
 
