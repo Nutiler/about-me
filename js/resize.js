@@ -59,7 +59,7 @@ window.addEventListener('load', function() {
 	}
 	
 	initialized();
-	animate();
+	// animate();
 	
 });
 

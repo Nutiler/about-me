@@ -46,10 +46,10 @@ function postProcessing() {
 
 	// Bloom
 	bloomPass = new WAGNER.MultiPassBloomPass();
-	bloomPass.params.strength = .5;
-	bloomPass.params.blurAmount = 1.2;
+	bloomPass.params.strength = .3;
+	bloomPass.params.blurAmount = 0.5;
 	bloomPass.params.applyZoomBlur = true;
-	bloomPass.params.zoomBlurStrength = .04;
+	bloomPass.params.zoomBlurStrength = .02;
 	// bloomPass.params.useTexture = true;
 
 	// Depth of Feild
@@ -76,7 +76,7 @@ function postProcessing() {
 	gui.add(bloomPass.params, 'blurAmount').min(0).max(2);
 	gui.add(bloomPass.params, 'applyZoomBlur');
 	gui.add(bloomPass.params, 'zoomBlurStrength').min(0).max(2);
-	gui.add(bloomPass.params, 'useTexture');
+	// gui.add(bloomPass.params, 'useTexture');
 
 	gui.add(dofPass.params, 'from').min(0).max(1);
 	gui.add(dofPass.params, 'to').min(0).max(1);
@@ -149,6 +149,7 @@ function renderPass() {
 	composer.pass(vignette2Pass);
 	composer.pass(rgbSplitPass);
 	composer.pass(noisePass);
+
 
 	composer.toScreen();
 	
