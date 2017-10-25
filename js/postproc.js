@@ -10,12 +10,13 @@ var composer, depthTexture, sL, gui;
 var depthMaterial = new THREE.MeshBasicMaterial();
 var rgbSplitPass, noisePass, vignette2Pass,
 	bloomPass, glowTexture, dofPass, fxaaPass;
-var glowMaterial = new THREE.MeshBasicMaterial({
-	map: tloader.load('./assets/textures/1324-glow.jpg'),
-});
 
-glowMaterial.map.repeat = new THREE.Vector2(1, 1);
-glowMaterial.map.wrapS = glowMaterial.map.wrapT = THREE.RepeatWrapping;
+//  // Only used for specific object glows.
+// var glowMaterial = new THREE.MeshBasicMaterial({
+// 	map: tloader.load('./assets/textures/1324-glow.jpg'),
+// });
+// glowMaterial.map.repeat = new THREE.Vector2(1, 1);
+// glowMaterial.map.wrapS = glowMaterial.map.wrapT = THREE.RepeatWrapping;
 
 // rStats.js - http://spite.github.io/rstats/
 var rS = new rStats({
@@ -27,6 +28,7 @@ var rS = new rStats({
 });
 
 function postProcessing() {
+	
 	composer = new WAGNER.Composer(renderer, { useRGBA: false });
 
 	// Color Split
@@ -61,6 +63,7 @@ function postProcessing() {
 	// FXAA
 	fxaaPass = new WAGNER.FXAAPass();
 
+
 	// GUI - https://github.com/dataarts/dat.gui
 	gui = new dat.GUI();
 
@@ -85,6 +88,8 @@ function postProcessing() {
 
 	gui.close();
 
+
+	// Load Shaders
 	sL = new ShaderLoader();
 	sL.add('depth-vs', './assets/shaders/vertex-shaders/packed-depth-vs.glsl');
 	sL.add('depth-fs', './assets/shaders/fragment-shaders/packed-depth-fs.glsl');
@@ -157,4 +162,4 @@ function renderPass() {
 
 }
 
-/*global scene,THREE,camera,WAGNER,tloader,ShaderLoader,renderer,createCubes,dat,rStats*/
+/*global scene,THREE,camera,WAGNER,tloader,ShaderLoader,renderer,dat,rStats*/

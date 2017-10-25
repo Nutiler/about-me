@@ -1,3 +1,5 @@
+// Keyboard Control Events.
+
 var onKeyDown = function(event) {
 
     switch (event.keyCode) {

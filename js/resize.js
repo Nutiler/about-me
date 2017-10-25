@@ -8,7 +8,7 @@ window.addEventListener('load', function() {
 
 		var element = document.body;
 		var pointerlockchange = function(event) {
-			
+
 			if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
 
 				controlsEnabled = true;
@@ -16,7 +16,7 @@ window.addEventListener('load', function() {
 
 				pause.style.display = 'none';
 			}
-			
+
 			else {
 				controls.enabled = false;
 
@@ -26,7 +26,7 @@ window.addEventListener('load', function() {
 
 				instructions.style.display = '';
 			}
-			
+
 		};
 
 		var pointerlockerror = function(event) {
@@ -43,7 +43,7 @@ window.addEventListener('load', function() {
 		document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
 
 		instructions.addEventListener('click', function(event) {
-			
+
 			instructions.style.display = 'none';
 			// Ask the browser to lock the pointer.
 			element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
@@ -57,27 +57,27 @@ window.addEventListener('load', function() {
 		instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API.';
 
 	}
-	
+
 	initialized();
-	// animate();
-	
+	animate();
+
 });
 
 
 // Update scene when resizing the window.
 function onWindowResize() {
-	
+
 	var s = 1,
 		w = window.innerWidth,
 		h = window.innerHeight;
-		
+
 	renderer.setSize(s * w, s * h);
 	camera.aspect = window.innerWidth / window.innerHeight;
 
 	camera.updateProjectionMatrix();
 	resizePass();
 	console.log("THREE.Window resized.");
-	
+
 }
 
 /*global camera,renderer,resizePass,animate,initialized,controls,controlsEnabled*/
