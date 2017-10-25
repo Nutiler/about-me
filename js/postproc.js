@@ -18,6 +18,7 @@ var rgbSplitPass, noisePass, vignette2Pass,
 // glowMaterial.map.repeat = new THREE.Vector2(1, 1);
 // glowMaterial.map.wrapS = glowMaterial.map.wrapT = THREE.RepeatWrapping;
 
+
 // rStats.js - http://spite.github.io/rstats/
 var rS = new rStats({
 	CSSPath: './assets/stats/',
@@ -26,6 +27,7 @@ var rS = new rStats({
 		fps: { caption: 'Framerate', below: 30 }
 	}
 });
+
 
 function postProcessing() {
 	
@@ -67,24 +69,29 @@ function postProcessing() {
 	// GUI - https://github.com/dataarts/dat.gui
 	gui = new dat.GUI();
 
-	gui.add(rgbSplitPass.params.delta, 'x').min(0).max(100);
-	gui.add(rgbSplitPass.params.delta, 'y').min(0).max(100);
+	var f1 = gui.addFolder('rgb');
+	f1.add(rgbSplitPass.params.delta, 'x').min(0).max(100);
+	f1.add(rgbSplitPass.params.delta, 'y').min(0).max(100);
 
-	gui.add(noisePass.params, 'amount').min(0).max(2);
-	gui.add(noisePass.params, 'speed').min(0).max(1000);
+	var f2 = gui.addFolder('noise');
+	f2.add(noisePass.params, 'amount').min(0).max(2);
+	f2.add(noisePass.params, 'speed').min(0).max(1000);
 
-	gui.add(vignette2Pass.params, 'boost').min(0).max(10);
-	gui.add(vignette2Pass.params, 'reduction').min(0).max(10);
+	var f3 = gui.addFolder('vignette');
+	f3.add(vignette2Pass.params, 'boost').min(0).max(10);
+	f3.add(vignette2Pass.params, 'reduction').min(0).max(10);
 
-	gui.add(bloomPass.params, 'blurAmount').min(0).max(2);
-	gui.add(bloomPass.params, 'applyZoomBlur');
-	gui.add(bloomPass.params, 'zoomBlurStrength').min(0).max(2);
+	var f4 = gui.addFolder('bloom');
+	f4.add(bloomPass.params, 'blurAmount').min(0).max(2);
+	f4.add(bloomPass.params, 'applyZoomBlur');
+	f4.add(bloomPass.params, 'zoomBlurStrength').min(0).max(2);
 	// gui.add(bloomPass.params, 'useTexture');
 
-	gui.add(dofPass.params, 'from').min(0).max(1);
-	gui.add(dofPass.params, 'to').min(0).max(1);
-	gui.add(dofPass.params, 'amount').min(0).max(100);
-	gui.add(dofPass.params, 'invertBiasMap');
+	var f5 = gui.addFolder('depth');
+	f5.add(dofPass.params, 'from').min(0).max(1);
+	f5.add(dofPass.params, 'to').min(0).max(1);
+	f5.add(dofPass.params, 'amount').min(0).max(100);
+	f5.add(dofPass.params, 'invertBiasMap');
 
 	gui.close();
 
@@ -107,6 +114,7 @@ function postProcessing() {
 	});
 }
 
+
 function resizePass() {
 	
 	composer.setSize(renderer.domElement.width, renderer.domElement.height);
@@ -115,6 +123,7 @@ function resizePass() {
 	depthTexture = WAGNER.Pass.prototype.getOfflineTexture(composer.width, composer.height, false);
 	
 }
+
 
 function renderPass() {
 

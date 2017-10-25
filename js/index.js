@@ -60,10 +60,10 @@ function initialized() {
 
 
 	// Lighting
-	light1 = getLight('rgb(145, 200, 255)', 1);
+	var light1 = getLight('rgb(145, 200, 255)', 0.1);
 	light1.name = 'light1';
 	
-	light2 = getLight('rgb(255, 220, 180)', 1);
+	var light2 = getLight('rgb(255, 220, 180)', 0.3);
 	light2.name = 'light2';
 
 	light1.position.x = -200;
@@ -90,7 +90,7 @@ function initialized() {
 	// Invert the geometry on the x-axis so that all of the faces point inward.
 	geometry.scale(-1, 1, 1);
 	material = new THREE.MeshBasicMaterial({
-		map: new THREE.TextureLoader().load('./assets/textures/tomasz-szawaklo-pelton-pond.jpg')
+		map: new THREE.TextureLoader().load('./assets/textures/tomasz-szawaklo-pelton-pond-dark.jpg')
 	});
 	mesh = new THREE.Mesh(geometry, material);
 	scene.add(mesh);
@@ -141,12 +141,12 @@ function render() {
 	requestAnimationFrame(render);
 	renderPass();
 
-	light1 = scene.getObjectByName('light1');
-	light1.intensity += (Math.random() - 0.5) * 0.15;
+	var light1 = scene.getObjectByName('light1');
+	light1.intensity += (Math.random() - 0.5) * 0.15; //.15
 	light1.intensity = Math.abs(light1.intensity);
 
-	light2 = scene.getObjectByName('light2');
-	light2.intensity += (Math.random() - 0.5) * 0.05;
+	var light2 = scene.getObjectByName('light2');
+	light2.intensity += (Math.random() - 0.5) * 0.05; //.05
 	light2.intensity = Math.abs(light2.intensity);
 	
 }
